@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { cn } from "@/lib/utils";
 
@@ -35,6 +35,21 @@ export function DataTable<T>({
   className,
 }: DataTableProps<T>) {
   const parentRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const updateScrollShadows = () => {
+    const el = parentRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 4);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
+  };
+
+  useEffect(() => {
+    updateScrollShadows();
+    window.addEventListener("resize", updateScrollShadows);
+    return () => window.removeEventListener("resize", updateScrollShadows);
+  }, [rows.length, columns.length]);
 
   const gridTemplateColumns = useMemo(
     () => columns.map((c) => `${c.width ?? DEFAULT_COLUMN_WIDTH}px`).join(" "),
@@ -82,8 +97,8 @@ export function DataTable<T>({
   );
 
   return (
-    <div className={cn("overflow-hidden rounded-xl border border-border bg-surface", className)}>
-      <div ref={parentRef} className="overflow-auto" style={{ maxHeight }}>
+    <div className={cn("relative overflow-hidden rounded-xl border border-border bg-surface", className)}>
+      <div ref={parentRef} onScroll={updateScrollShadows} className="overflow-auto" style={{ maxHeight }}>
         <div style={{ width: totalWidth, minWidth: "100%" }}>
           <div
             role="row"
@@ -111,6 +126,22 @@ export function DataTable<T>({
           )}
         </div>
       </div>
+
+      {/* edge fades hint that there's more to scroll to, mainly useful on touch screens */}
+      <div
+        aria-hidden
+        className={cn(
+          "pointer-events-none absolute inset-y-0 left-0 z-20 w-6 bg-gradient-to-r from-surface to-transparent transition-opacity",
+          canScrollLeft ? "opacity-100" : "opacity-0"
+        )}
+      />
+      <div
+        aria-hidden
+        className={cn(
+          "pointer-events-none absolute inset-y-0 right-0 z-20 w-6 bg-gradient-to-l from-surface to-transparent transition-opacity",
+          canScrollRight ? "opacity-100" : "opacity-0"
+        )}
+      />
     </div>
   );
 }
