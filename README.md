@@ -4,8 +4,8 @@ An AI-powered CSV importer that maps **any** lead export — Facebook Lead Ads, 
 
 Built for the GrowEasy Software Developer assignment.
 
-- **Live app:** _add your deployed frontend URL here_
-- **Live API:** _add your deployed backend URL here_
+- **Live app:** https://groweasy-ai-csv-importer-ten.vercel.app/
+- **Live API:** https://groweasy-ai-csv-importer-backend-awi3.onrender.com
 
 ## How it works
 
@@ -178,4 +178,4 @@ Frontend on `:3000`, backend on `:4000`.
 - [x] Dark mode
 - [x] Unit tests (Vitest, backend)
 - [x] Docker setup
-- [ ] Deployed to Vercel/Railway/Render — see [Deployment](#deployment)
+- [x] Deployed to Vercel + Render — see links at the top of this README
