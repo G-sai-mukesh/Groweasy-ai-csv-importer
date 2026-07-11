@@ -13,8 +13,6 @@
   --primary-foreground: #ffffff;
   --secondary: #f57141;
   --secondary-foreground: #ffffff;
-  --brand-mark: #14171a;
-  --brand-mark-foreground: #ffffff;
   --muted-foreground: #64748b;
 }
 
@@ -28,9 +26,6 @@
   --primary-foreground: #06201b;
   --secondary: #f57141;
   --secondary-foreground: #ffffff;
-  /* near-black logo mark is invisible here, so invert it */
-  --brand-mark: #e8ecf1;
-  --brand-mark-foreground: #0d0f12;
   --muted-foreground: #94a3b8;
 }
 
@@ -44,8 +39,6 @@
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
-  --color-brand-mark: var(--brand-mark);
-  --color-brand-mark-foreground: var(--brand-mark-foreground);
   --color-muted-foreground: var(--muted-foreground);
   --font-sans: var(--font-inter);
 }

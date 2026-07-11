@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
+import Image from "next/image";
 import {
   FileCheck2,
   FileX2,
@@ -9,7 +10,6 @@ import {
   ArrowRight,
   AlertCircle,
 } from "lucide-react";
-import { LogoMark } from "@/components/logo-mark";
 import { FileDropzone } from "@/components/file-dropzone";
 import { DataTable, type DataTableColumn } from "@/components/data-table";
 import { Stepper, type StepId } from "@/components/stepper";
@@ -153,8 +153,9 @@ export default function Home() {
     <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
       <header className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-mark text-brand-mark-foreground">
-            <LogoMark className="h-5 w-5" />
+          <div className="relative h-10 w-10 shrink-0">
+            <Image src="/logo-light.svg" alt="GrowEasy" fill className="dark:hidden" priority />
+            <Image src="/logo-dark.svg" alt="GrowEasy" fill className="hidden dark:block" priority />
           </div>
           <div>
             <h1 className="text-lg font-bold tracking-tight leading-tight">GrowEasy CSV Importer</h1>

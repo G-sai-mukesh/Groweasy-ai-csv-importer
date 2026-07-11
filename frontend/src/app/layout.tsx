@@ -11,6 +11,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "GrowEasy CSV Importer",
   description: "AI-powered CSV importer that maps any lead export into GrowEasy CRM format.",
+  icons: { icon: "/favicon.svg" },
 };
 
 export default function RootLayout({
