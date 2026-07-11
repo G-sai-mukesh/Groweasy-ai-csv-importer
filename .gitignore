@@ -1,0 +1,8 @@
+# Local tooling / editor config, not part of the project
+.claude/
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
