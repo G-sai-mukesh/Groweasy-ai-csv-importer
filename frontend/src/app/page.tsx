@@ -153,11 +153,11 @@ export default function Home() {
     <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
       <header className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-mark text-brand-mark-foreground">
             <LogoMark className="h-5 w-5" />
           </div>
           <div>
-            <h1 className="text-lg font-semibold leading-tight">GrowEasy CSV Importer</h1>
+            <h1 className="text-lg font-bold tracking-tight leading-tight">GrowEasy CSV Importer</h1>
             <p className="text-xs text-muted-foreground">AI-powered lead mapping for any CSV layout</p>
           </div>
         </div>
@@ -200,7 +200,7 @@ export default function Home() {
                 </button>
                 <button
                   onClick={handleConfirmImport}
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-secondary px-4 py-2 text-sm font-semibold text-secondary-foreground shadow-sm transition-opacity hover:opacity-90"
                 >
                   Confirm &amp; Import <ArrowRight size={14} />
                 </button>
