@@ -39,8 +39,20 @@ The brief is explicit that the challenge isn't parsing CSV — it's making arbit
 
 ```
 PR-M/
-├── frontend/     Next.js app (see frontend/README.md)
-├── backend/      Express API (see backend/README.md)
+├── frontend/                        Next.js app
+│   └── src/
+│       ├── app/                     Pages, layout, global styles
+│       ├── components/              Data table, dropzone, stepper, badges, etc.
+│       └── lib/                     CSV client parsing, streaming API client, shared types, utils
+├── backend/                         Express API
+│   └── src/
+│       ├── config/                  Env loading + validation (zod)
+│       ├── controllers/             HTTP handlers
+│       ├── routes/                  Express routers
+│       ├── middleware/              Multer upload config, centralized error handler
+│       ├── services/                CSV parsing, Gemini extraction, batching/streaming orchestration
+│       ├── utils/                   Concurrency pool for parallel batch processing
+│       └── types/                   Shared CRM types
 └── docker-compose.yml
 ```
 
@@ -64,6 +76,16 @@ Starts on `http://localhost:4000`. Check `http://localhost:4000/health`.
 
 > Note: not every Gemini model is enabled on every key/project. `GEMINI_MODEL` defaults to `gemini-flash-latest`, which is broadly available; if you hit a 404 for a specific model name, list available models for your key or switch to another current Gemini model.
 
+**Backend scripts:**
+
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start with hot-reload (`tsx watch`) |
+| `npm run build` | Compile TypeScript to `dist/` |
+| `npm run start` | Run the compiled build |
+| `npm run typecheck` | Type-check without emitting |
+| `npm test` | Run the unit test suite (Vitest) |
+
 ### 2. Frontend
 
 ```bash
@@ -75,12 +97,50 @@ npm run dev
 
 Starts on `http://localhost:3000` (or the next free port). Open it in a browser — both servers must be running.
 
-### Running tests
+**Frontend scripts:**
+
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start the dev server (Turbopack) |
+| `npm run build` | Production build |
+| `npm run start` | Serve the production build |
+| `npm run lint` | ESLint |
+
+## API reference
+
+### `POST /api/csv/import`
+
+`multipart/form-data` with a `file` field (`.csv`, max 5MB by default).
+
+Streams newline-delimited JSON (NDJSON) as the import progresses:
+
+```
+{"type":"meta","totalRows":50,"totalBatches":2,"batchSize":25}
+{"type":"progress","batchIndex":0,"totalBatches":2,"processedRows":25,"totalRows":50}
+{"type":"progress","batchIndex":1,"totalBatches":2,"processedRows":50,"totalRows":50}
+{"type":"done","summary":{"totalRows":50,"totalImported":47,"totalSkipped":3,"imported":[...],"skipped":[...]}}
+```
+
+A batch that fails after retries emits `{"type":"batch_error",...}` and its rows are marked skipped in the final summary — the whole import never fails because of one bad batch.
+
+## CRM field mapping reference
+
+| Field | Notes |
+| --- | --- |
+| `created_at` | Must be parseable by `new Date(...)` |
+| `crm_status` | One of `GOOD_LEAD_FOLLOW_UP`, `DID_NOT_CONNECT`, `BAD_LEAD`, `SALE_DONE`, or empty |
+| `data_source` | One of `leads_on_demand`, `meridian_tower`, `eden_park`, `varah_swamy`, `sarjapur_plots`, or empty |
+| `crm_note` | Remarks, extra emails/numbers beyond the first, anything without a dedicated field |
+| skip rule | A row with **neither** an email **nor** a mobile number is skipped, not imported |
+
+## Testing
 
 ```bash
 cd backend
 npm test
 ```
+
+20 unit tests covering CSV parsing edge cases, AI-response normalization (enum validation, skip-rule enforcement independent of what the model claims), the concurrency pool, and batch-failure isolation in the import orchestrator.
 
 ## Deployment
 
@@ -89,7 +149,7 @@ npm test
 1. Push this repo to GitHub.
 2. Create a new **Web Service** on [Railway](https://railway.app) or [Render](https://render.com), pointing at this repo with **root directory `backend`**.
 3. Build command: `npm install && npm run build`. Start command: `npm start`.
-4. Set environment variables: `GEMINI_API_KEY`, `GEMINI_MODEL` (optional), `CORS_ORIGIN` (your deployed frontend URL — set this *after* step below), `NODE_ENV=production`.
+4. Set environment variables: `GEMINI_API_KEY`, `GEMINI_MODEL` (optional), `CORS_ORIGIN` (your deployed frontend URL — set this *after* the step below), `NODE_ENV=production`.
 5. Deploy. Note the resulting URL (e.g. `https://groweasy-backend.up.railway.app`).
 
 ### Frontend → Vercel
@@ -107,16 +167,6 @@ GEMINI_API_KEY=your_key docker compose up --build
 ```
 
 Frontend on `:3000`, backend on `:4000`.
-
-## CRM field mapping reference
-
-| Field | Notes |
-| --- | --- |
-| `created_at` | Must be parseable by `new Date(...)` |
-| `crm_status` | One of `GOOD_LEAD_FOLLOW_UP`, `DID_NOT_CONNECT`, `BAD_LEAD`, `SALE_DONE`, or empty |
-| `data_source` | One of `leads_on_demand`, `meridian_tower`, `eden_park`, `varah_swamy`, `sarjapur_plots`, or empty |
-| `crm_note` | Remarks, extra emails/numbers beyond the first, anything without a dedicated field |
-| skip rule | A row with **neither** an email **nor** a mobile number is skipped, not imported |
 
 ## Bonus features implemented
 
