@@ -153,9 +153,8 @@ export default function Home() {
     <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
       <header className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div className="flex items-center gap-3">
-          <div className="relative h-10 w-10 shrink-0">
-            <Image src="/logo-light.svg" alt="GrowEasy" fill className="dark:hidden" priority />
-            <Image src="/logo-dark.svg" alt="GrowEasy" fill className="hidden dark:block" priority />
+          <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-xl dark:ring-2 dark:ring-white/80">
+            <Image src="/logo-light.svg" alt="GrowEasy" fill priority />
           </div>
           <div>
             <h1 className="text-lg font-bold tracking-tight leading-tight">GrowEasy CSV Importer</h1>
