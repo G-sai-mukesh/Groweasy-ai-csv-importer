@@ -8,9 +8,7 @@
   --surface: #ffffff;
   --surface-muted: #f1f5f9;
   --border: #e2e8f0;
-  /* GrowEasy brand (groweasy.ai): deep teal is the chrome/brand color used
-     for nav, links and informational accents; coral is reserved for primary
-     actions/CTAs, matching how the real site separates the two. */
+  /* groweasy.ai colors - teal for chrome/links, coral for CTAs */
   --primary: #225e56;
   --primary-foreground: #ffffff;
   --secondary: #f57141;
@@ -30,8 +28,7 @@
   --primary-foreground: #06201b;
   --secondary: #f57141;
   --secondary-foreground: #ffffff;
-  /* Near-black would disappear against the dark background, so the mark
-     inverts to light-on-dark here instead. */
+  /* near-black logo mark is invisible here, so invert it */
   --brand-mark: #e8ecf1;
   --brand-mark-foreground: #0d0f12;
   --muted-foreground: #94a3b8;

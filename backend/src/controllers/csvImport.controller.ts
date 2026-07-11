@@ -3,14 +3,7 @@ import { HttpError } from "../middleware/errorHandler";
 import { runImport } from "../services/importOrchestrator.service";
 import type { ImportStreamEvent } from "../types/crm.types";
 
-/**
- * POST /api/csv/import
- *
- * Accepts a multipart CSV upload and streams newline-delimited JSON (NDJSON)
- * progress events as batches are processed, ending with a "done" event that
- * carries the full ImportSummary. Streaming lets the frontend show live
- * progress instead of a single opaque spinner for potentially large files.
- */
+// POST /api/csv/import - streams NDJSON progress events, ends with "done" + the full summary
 export async function importCsvHandler(req: Request, res: Response, next: NextFunction): Promise<void> {
   const file = req.file;
   if (!file) {

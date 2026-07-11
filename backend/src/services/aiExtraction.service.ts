@@ -129,7 +129,7 @@ export function isTransientError(err: unknown): boolean {
   return /429|500|503|rate.?limit|timeout|ECONNRESET|fetch failed/i.test(message);
 }
 
-/** Defensive normalization: never trust the model blindly for enums/skip logic. */
+// don't trust the model's enum/skip choices blindly, re-check them here
 export function normalizeExtractedRow(raw: Record<string, unknown>): ExtractedRow {
   const sourceIndex = typeof raw.sourceIndex === "number" ? raw.sourceIndex : -1;
 
@@ -189,10 +189,6 @@ export function normalizeExtractedRow(raw: Record<string, unknown>): ExtractedRo
 
 export class AiExtractionError extends Error {}
 
-/**
- * Sends one batch of rows to Gemini and returns normalized ExtractedRow results,
- * retrying transient failures with exponential backoff.
- */
 export async function extractBatch(indexedRows: IndexedRow[]): Promise<ExtractedRow[]> {
   const model = genAI.getGenerativeModel({
     model: env.GEMINI_MODEL,
@@ -215,7 +211,7 @@ export async function extractBatch(indexedRows: IndexedRow[]): Promise<Extracted
 
       const normalized = parsed.map((raw) => normalizeExtractedRow(raw));
 
-      // Ensure every input row produced an output; fill any gaps defensively.
+      // model occasionally drops a row - patch in the gaps as skipped
       const seen = new Set(normalized.map((r) => r.sourceIndex));
       for (const { index } of indexedRows) {
         if (!seen.has(index)) {

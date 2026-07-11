@@ -24,12 +24,8 @@ const DEFAULT_COLUMN_WIDTH = 200;
 const ROW_HEIGHT = 44;
 const VIRTUALIZE_THRESHOLD = 60;
 
-/**
- * A responsive data grid built on CSS grid rather than <table>, so header and
- * body rows can share one horizontally-scrolling track while the header stays
- * sticky and large row counts get vertically virtualized without layout
- * thrash. Falls back to plain rendering under VIRTUALIZE_THRESHOLD rows.
- */
+// CSS grid instead of a real <table> so header + body share one scroll
+// track and rows can be virtualized above VIRTUALIZE_THRESHOLD
 export function DataTable<T>({
   columns,
   rows,

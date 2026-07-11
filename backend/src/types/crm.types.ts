@@ -17,10 +17,9 @@ export const DATA_SOURCE_VALUES = [
 
 export type DataSource = (typeof DATA_SOURCE_VALUES)[number];
 
-/** A single raw CSV row as parsed, keyed by original column header. */
+// keyed by whatever the CSV's original column headers were
 export type RawCsvRecord = Record<string, string>;
 
-/** A single AI-extracted CRM record, mapped to GrowEasy's canonical schema. */
 export interface CrmRecord {
   created_at: string | null;
   name: string | null;
@@ -39,7 +38,6 @@ export interface CrmRecord {
   description: string | null;
 }
 
-/** Result of AI extraction for a single input row, preserving its original index. */
 export interface ExtractedRow {
   sourceIndex: number;
   skipped: boolean;
@@ -55,7 +53,7 @@ export interface ImportSummary {
   skipped: Array<{ row: RawCsvRecord; reason: string }>;
 }
 
-/** NDJSON streaming event shapes sent from backend to frontend during import. */
+// events written to the NDJSON response stream, one per line
 export type ImportStreamEvent =
   | { type: "meta"; totalRows: number; totalBatches: number; batchSize: number }
   | { type: "progress"; batchIndex: number; totalBatches: number; processedRows: number; totalRows: number }

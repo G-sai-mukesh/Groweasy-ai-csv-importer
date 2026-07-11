@@ -8,7 +8,7 @@ export interface ParsedCsv {
 
 export class CsvClientParseError extends Error {}
 
-/** Client-side-only parse used purely for the preview step; the backend re-parses independently. */
+// preview only - backend parses the file again itself on confirm
 export function parseCsvFile(file: File): Promise<ParsedCsv> {
   return new Promise((resolve, reject) => {
     Papa.parse<RawCsvRecord>(file, {

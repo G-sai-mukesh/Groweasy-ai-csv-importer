@@ -1,8 +1,5 @@
-/**
- * Runs `tasks` with at most `limit` running concurrently, invoking `onSettled`
- * as each one finishes (not necessarily in order). Used to parallelize AI batch
- * calls without overwhelming the provider's rate limits.
- */
+// simple worker-pool: runs `tasks` with at most `limit` in flight, calling
+// onSettled as each finishes (order not guaranteed)
 export async function runWithConcurrencyLimit<T>(
   tasks: Array<() => Promise<T>>,
   limit: number,

@@ -10,8 +10,7 @@ export function ThemeToggle({ className }: { className?: string }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // next-themes only knows the resolved theme after client mount (it reads
-    // localStorage/media query); this flag avoids an SSR/CSR hydration mismatch.
+    // avoids hydration mismatch - resolvedTheme isn't known until after mount
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);

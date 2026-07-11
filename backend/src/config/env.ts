@@ -7,8 +7,7 @@ const envSchema = z.object({
   PORT: z.coerce.number().default(4000),
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
   CORS_ORIGIN: z.string().default("http://localhost:3000"),
-  // Unit tests mock the AI client rather than calling Gemini for real, so a
-  // real key isn't required to run `npm test` (e.g. in CI with no secrets).
+  // tests mock the AI client, so no real key needed to run npm test
   GEMINI_API_KEY: isTest ? z.string().default("test-key") : z.string().min(1, "GEMINI_API_KEY is required"),
   GEMINI_MODEL: z.string().default("gemini-flash-latest"),
   MAX_FILE_SIZE_MB: z.coerce.number().default(5),

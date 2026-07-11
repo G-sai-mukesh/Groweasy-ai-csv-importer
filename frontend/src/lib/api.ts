@@ -4,11 +4,7 @@ export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost
 
 export class ImportRequestError extends Error {}
 
-/**
- * Uploads the CSV file to the backend and streams back NDJSON progress events
- * as the AI processes each batch, invoking `onEvent` for every line as it
- * arrives. Resolves once the stream ends (after a "done" or "error" event).
- */
+// reads the NDJSON response line by line, firing onEvent as each arrives
 export async function streamCsvImport(file: File, onEvent: (event: ImportStreamEvent) => void): Promise<void> {
   const formData = new FormData();
   formData.append("file", file);

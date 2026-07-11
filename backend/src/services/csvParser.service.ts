@@ -3,12 +3,8 @@ import type { RawCsvRecord } from "../types/crm.types";
 
 export class CsvParseError extends Error {}
 
-/**
- * Parses raw CSV text into an array of records keyed by header column name.
- * Makes no assumption about column names — whatever headers the file has
- * become the object keys, which is what lets the AI mapping step handle
- * arbitrary layouts downstream.
- */
+// No fixed column names here on purpose - whatever headers the file has become
+// the object keys, and the AI mapping step deals with making sense of them.
 export function parseCsvBuffer(buffer: Buffer): RawCsvRecord[] {
   let records: RawCsvRecord[];
   try {
@@ -29,6 +25,6 @@ export function parseCsvBuffer(buffer: Buffer): RawCsvRecord[] {
     throw new CsvParseError("CSV file contains no data rows.");
   }
 
-  // Drop rows that are entirely empty (all-blank cells), common in exported sheets.
+  // exported sheets often have trailing blank rows
   return records.filter((row) => Object.values(row).some((v) => v && v.trim().length > 0));
 }

@@ -6,12 +6,8 @@ import type { CrmRecord, ExtractedRow, ImportStreamEvent, RawCsvRecord } from ".
 
 export { CsvParseError, AiExtractionError };
 
-/**
- * Parses the uploaded CSV, runs AI extraction in concurrency-limited batches,
- * and reports progress via `onEvent` as each batch completes. A batch that
- * fails after retries does not fail the whole import — its rows are marked
- * skipped with a clear reason, and processing continues.
- */
+// A batch that fails after retries doesn't kill the whole import - those rows
+// just get marked skipped with a reason, and the rest carries on.
 export async function runImport(
   buffer: Buffer,
   onEvent: (event: ImportStreamEvent) => void
