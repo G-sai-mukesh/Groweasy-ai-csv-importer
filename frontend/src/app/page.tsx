@@ -2,7 +2,6 @@
 
 import { useCallback, useMemo, useState } from "react";
 import {
-  Sparkles,
   FileCheck2,
   FileX2,
   ListChecks,
@@ -10,6 +9,7 @@ import {
   ArrowRight,
   AlertCircle,
 } from "lucide-react";
+import { LogoMark } from "@/components/logo-mark";
 import { FileDropzone } from "@/components/file-dropzone";
 import { DataTable, type DataTableColumn } from "@/components/data-table";
 import { Stepper, type StepId } from "@/components/stepper";
@@ -154,7 +154,7 @@ export default function Home() {
       <header className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-            <Sparkles size={20} />
+            <LogoMark className="h-5 w-5" />
           </div>
           <div>
             <h1 className="text-lg font-semibold leading-tight">GrowEasy CSV Importer</h1>
