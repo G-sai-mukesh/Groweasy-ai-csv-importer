@@ -11,6 +11,10 @@ const envSchema = z.object({
   GEMINI_API_KEY: isTest ? z.string().default("test-key") : z.string().min(1, "GEMINI_API_KEY is required"),
   GEMINI_MODEL: z.string().default("gemini-flash-latest"),
   MAX_FILE_SIZE_MB: z.coerce.number().default(5),
+  // a file under MAX_FILE_SIZE_MB can still pack in huge numbers of short
+  // rows; cap row count too so one upload can't fan out into thousands of
+  // Gemini calls
+  MAX_ROWS: z.coerce.number().default(5000),
   BATCH_SIZE: z.coerce.number().default(25),
   BATCH_CONCURRENCY: z.coerce.number().default(3),
   AI_MAX_RETRIES: z.coerce.number().default(3),

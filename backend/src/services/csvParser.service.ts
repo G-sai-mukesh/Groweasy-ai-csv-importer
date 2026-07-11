@@ -1,4 +1,5 @@
 import { parse } from "csv-parse/sync";
+import { env } from "../config/env";
 import type { RawCsvRecord } from "../types/crm.types";
 
 export class CsvParseError extends Error {}
@@ -23,6 +24,10 @@ export function parseCsvBuffer(buffer: Buffer): RawCsvRecord[] {
 
   if (records.length === 0) {
     throw new CsvParseError("CSV file contains no data rows.");
+  }
+
+  if (records.length > env.MAX_ROWS) {
+    throw new CsvParseError(`CSV has ${records.length} rows, which exceeds the ${env.MAX_ROWS} row limit.`);
   }
 
   // exported sheets often have trailing blank rows

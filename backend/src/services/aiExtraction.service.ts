@@ -235,9 +235,11 @@ export async function extractBatch(indexedRows: IndexedRow[]): Promise<Extracted
     }
   }
 
-  throw new AiExtractionError(
-    lastError instanceof Error ? `AI extraction failed: ${lastError.message}` : "AI extraction failed"
-  );
+  // full detail (model names, endpoint URLs, provider error text) stays in the
+  // server log only - clients just get a generic reason, not our AI vendor's
+  // internals
+  console.error("Gemini batch extraction failed:", lastError);
+  throw new AiExtractionError("AI extraction failed for this batch. Please try again.");
 }
 
 export function chunkIntoBatches(rows: RawCsvRecord[], batchSize: number): IndexedRow[][] {

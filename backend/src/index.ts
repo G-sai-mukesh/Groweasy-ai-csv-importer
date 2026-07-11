@@ -9,6 +9,11 @@ import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
 
 const app = express();
 
+// deployed behind a single reverse proxy (Render/Railway/Vercel etc) - without
+// this, express-rate-limit sees the proxy's IP for every request and all
+// users end up sharing one rate-limit bucket instead of getting their own
+app.set("trust proxy", 1);
+
 app.use(helmet());
 app.use(
   cors({

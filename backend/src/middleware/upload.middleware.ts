@@ -1,5 +1,6 @@
 import multer from "multer";
 import { env } from "../config/env";
+import { HttpError } from "./errorHandler";
 
 const CSV_MIME_TYPES = new Set(["text/csv", "application/vnd.ms-excel", "application/csv", "text/plain"]);
 
@@ -12,7 +13,7 @@ export const csvUpload = multer({
     if (isCsvExtension || isCsvMimeType) {
       cb(null, true);
     } else {
-      cb(new Error("Only .csv files are supported."));
+      cb(new HttpError(400, "Only .csv files are supported."));
     }
   },
 });

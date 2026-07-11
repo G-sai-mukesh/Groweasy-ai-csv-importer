@@ -27,6 +27,10 @@ export function errorHandler(err: unknown, _req: Request, res: Response, _next: 
   let status = 500;
   let message = "Internal server error.";
 
+  // these are messages we authored ourselves for expected, user-facing
+  // situations - safe to echo back as-is. Anything else (unexpected errors,
+  // whatever a random thrown Error happens to say) falls through to the
+  // generic message below instead of leaking internals to the client.
   if (err instanceof HttpError) {
     status = err.status;
     message = err.message;
@@ -40,12 +44,9 @@ export function errorHandler(err: unknown, _req: Request, res: Response, _next: 
   } else if (err instanceof AiExtractionError) {
     status = 502;
     message = err.message;
-  } else if (err instanceof Error) {
-    status = err.message.includes(".csv") ? 400 : 500;
-    message = err.message;
   }
 
-  if (status === 500 && env.NODE_ENV !== "production") {
+  if (status >= 500) {
     console.error(err);
   }
 

@@ -40,4 +40,11 @@ describe("parseCsvBuffer", () => {
   it("throws CsvParseError for structurally invalid CSV", () => {
     expect(() => parseCsvBuffer(Buffer.from('"unterminated quote,val'))).toThrow(CsvParseError);
   });
+
+  it("rejects a file with more rows than MAX_ROWS, even if it's under the size limit", () => {
+    // a small file can still pack in far more rows than we want to fan out to the AI
+    const rows = Array.from({ length: 5001 }, (_, i) => `row${i},x@example.com`).join("\n");
+    const csv = `name,email\n${rows}\n`;
+    expect(() => parseCsvBuffer(Buffer.from(csv))).toThrow(/exceeds the 5000 row limit/);
+  });
 });
